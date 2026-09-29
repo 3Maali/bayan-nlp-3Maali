@@ -9,7 +9,7 @@
 | **Gate**           | **Status**    | **Required evidence**                    | **Commit/report links**                                                                                    | **Blocker/next action**                         |
 | ------------------ | ------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
 | A — ingest         | ✅ PASSED      | preprocessing tests + tokenizer decision | [Day 1 commit](https://github.com/3Maali/bayan-nlp-3Maali/commit/049bb67475346712550748b64db123f102d98483) | الانتقال إلى Gate B — classification + NER + QA |
-| B — tasks          | ⬜ NOT_STARTED | classification + NER + QA evidence       | FILL_ME                                                                                                    | تنفيذ Notebooks 03–04                           |
+| B — tasks          | ✅ PASSED  | classification + NER + QA evidence       | [Lab 3](https://github.com/3Maali/bayan-nlp-3Maali/commit/b5672665d06a2119c17f167ee0797194e4820128)  + [Lab 4](https://github.com/3Maali/bayan-nlp-3Maali/commit/5e3b7e50cff65c8eb54bc1382ad61951997576ea)                                                                                                    | تنفيذ Notebooks 03–04                           |
 | C — search & truth | ⬜ NOT_STARTED | search metrics + slices + taxonomy       | FILL_ME                                                                                                    | تنفيذ Notebooks 06–07                           |
 | D — ship           | ⬜ NOT_STARTED | project benchmark + API tests + canaries | FILL_ME                                                                                                    | تنفيذ Notebook 08 وقياسات المشروع               |
 | E — submit         | ⬜ NOT_STARTED | validator + demo + release tag           | FILL_ME                                                                                                    | تجهيز متطلبات التسليم النهائية                  |
@@ -23,8 +23,8 @@ Status values: `⬜ NOT_STARTED`, `🟨 IN_PROGRESS`, `✅ PASSED`, `🟥 BLOCKE
 | 00           | FILL_ME            | runtime checks             |                |
 | 01           | 2026-09-30         | `DAY1_NOTEBOOK1_CORE=PASS` | [Lab1](https://github.com/3Maali/bayan-nlp-3Maali/blob/main/notebooks/01_text_processing_tokenization.ipynb)           |
 | 02           | 2026-09-30         | `DAY1_NOTEBOOK2_CORE=PASS` | [Lab2](https://github.com/3Maali/bayan-nlp-3Maali/blob/main/notebooks/02_attention_transformers.ipynb)               |
-| 03           | FILL_ME            | `DAY2_NOTEBOOK3_CORE=PASS` | FILL_ME               |
-| 04           | FILL_ME            | `DAY2_NOTEBOOK4_CORE=PASS` | FILL_ME               |
+| 03           | FILL_ME            | `DAY2_NOTEBOOK3_CORE=PASS` | [Lab 3](https://github.com/3Maali/bayan-nlp-3Maali/commit/b5672665d06a2119c17f167ee0797194e4820128)               |
+| 04           | FILL_ME            | `DAY2_NOTEBOOK4_CORE=PASS` | [Lab 4](https://github.com/3Maali/bayan-nlp-3Maali/commit/5e3b7e50cff65c8eb54bc1382ad61951997576ea)               |
 | 05           | FILL_ME            | `DAY3_NOTEBOOK5_CORE=PASS` | FILL_ME               |
 | 06           | FILL_ME            | `DAY3_NOTEBOOK6_CORE=PASS` | FILL_ME               |
 | 07           | FILL_ME            | `DAY3_NOTEBOOK7_CORE=PASS` | FILL_ME               |
