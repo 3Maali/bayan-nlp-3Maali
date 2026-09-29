@@ -1,0 +1,18 @@
+{
+  "artifact": "bayan_arabic_profile",
+  "data_kind": "COURSE_FIXTURE",
+  "profile": "search",
+  "profile_version": "1.0.0",
+  "backend": "camel-tools==1.6.0",
+  "rules": [
+    "preserve_display_copy",
+    "mask_course_pii_patterns",
+    "unicode_normalize_no_compatibility",
+    "remove_tatweel_and_diacritics",
+    "fold_alef_and_alef_maksura",
+    "preserve_teh_marbuta"
+  ],
+  "golden_cases_passed": 4,
+  "fixture_rows": 20,
+  "variant_counts_are_predictions": false
+}
