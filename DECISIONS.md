@@ -1,183 +1,266 @@
 # DECISIONS — Bayan
 
-> انسخ القالب إلى `DECISIONS.md`. أضف قرارًا جديدًا لكل تغيير يؤثر في البيانات أو الجودة أو الخدمة.
-
-## Decision D-001 — اختيار الـTokenizer وMax Length
+## Decision D-001 — Tokenizer & Max Length
 
 * **Date:** 2026-09-30
 * **Gate:** A
 * **Status:** accepted
 * **Owner:** Student
 
-### Context | السياق
+### Context
 
-المشروع يحتاج إلى معالجة نصوص عربية وإنجليزية باستخدام نموذج ثنائي اللغة. تمت مقارنة سلوك الـtokenization على عينة صغيرة من 5 نصوص صناعية، مع قياس `fertility` و`truncation`.
+مقارنة Local WordPiece وmBERT على عينة صغيرة، باستخدام `fertility` و`truncation`.
 
-تم تثبيت العينة المستخدمة في القياس، ولم يتم تغيير بياناتها أثناء المقارنة.
+### Decision
 
-### Options considered | البدائل
+اعتماد **mBERT tokenizer** مع `max_length=12` كخط أساس.
 
-| **Option**      | **Benefit**                                                                     | **Cost/risk**                                                                | **Evidence**                                                        |
-| --------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| Local WordPiece | بسيط ومفيد للتعلم وفهم آلية تقسيم النص إلى subwords                             | Tokenizer تعليمي وليس مرتبطًا بنموذج pretrained                              | Arabic fertility = 1.39، English fertility = 1.32، truncation = 0%  |
-| mBERT tokenizer | متوافق مباشرة مع نموذج `bert-base-multilingual-cased` ويدعم العربية والإنجليزية | Arabic fertility أعلى في العينة الحالية، وحدث truncation عند `max_length=12` | Arabic fertility = 2.89، English fertility = 1.57، truncation = 40% |
+* Arabic fertility: **2.89**
+* English fertility: **1.57**
+* Truncation: **40%**
 
-### Decision | القرار
+سيتم إعادة تقييم `max_length` عند استخدام بيانات المشروع الفعلية.
 
-تم اختيار **mBERT tokenizer** مع `max_length=12` كخط أساس للمشروع، لأنه متوافق مباشرة مع النموذج pretrained المختار ويدعم معالجة النصوص العربية والإنجليزية.
+### Evidence
 
-تم اعتماد `max_length=12` كقيمة أولية في هذه المرحلة، مع تسجيل أن نسبة الـtruncation بلغت 40% على العينة الحالية. سيتم إعادة تقييم هذه القيمة عند استخدام نصوص المشروع الفعلية.
+* Day 1 Notebook 01
+* Tokenization tests: **PASS**
 
-### Evidence | الدليل
+### Consequences / Rollback
 
-* **Report/test/commit:** Day 1 Notebook 01 — Text Processing & Tokenisation
-* **Metric and result label:** mBERT Arabic fertility = 2.89، English fertility = 1.57، truncation rate @ `max_length=12` = 40%
-* **Slice or failure considered:** 5 نصوص صناعية عربية وإنجليزية، مع ملاحظة حدوث truncation في 40% من العينة عند `max_length=12`.
+قد نرفع `max_length` إذا ظهرت نسبة truncation مرتفعة على البيانات الفعلية.
 
-### Consequences and rollback | الأثر والرجوع
+---
 
-* **Positive consequence:** استخدام tokenizer متوافق مباشرة مع mBERT ويدعم اللغتين المطلوبتين في المشروع.
-* **Limitation/new risk:** ارتفاع Arabic fertility ووجود truncation عند `max_length=12` على العينة الحالية قد يؤثران على كفاءة المعالجة للنصوص الأطول.
-* **Rollback trigger:** إذا أظهرت بيانات المشروع الفعلية نسبة truncation مرتفعة أو أثرًا واضحًا على جودة المهام بسبب طول التسلسل.
-* **Rollback path:** إعادة تقييم `max_length` واختيار قيمة أعلى بناءً على قياسات بيانات المشروع، مع الحفاظ على mBERT tokenizer ما لم تظهر مشكلة مرتبطة بالـtokenizer نفسه.
-
--------
-
-## Decision D-002 — Day 2 Classification, NER & QA
+## Decision D-002 — Classification, NER & QA
 
 * **Date:** 2026-09-30
 * **Gate:** B
 * **Status:** accepted
 * **Owner:** Student
 
-### Context | السياق
+### Decision
 
-تم تنفيذ مهام التصنيف وNER وExtractive QA باستخدام بيانات صناعية صغيرة، مع مقارنة baseline بسيط بنموذج multilingual Transformer. الهدف هو إثبات صحة الـpipeline والتقييم، وليس إثبات أداء إنتاجي.
+اعتماد baseline **TF-IDF + LinearSVC** ومقارنة مع **Multilingual DistilBERT** باستخدام Partial Fine-tuning على CPU.
 
-### Checkpoint | نقطة الحفظ
+أفضل checkpoint للتصنيف: **Epoch 9** بناءً على Validation Macro-F1.
 
-تم اعتماد أفضل checkpoint للتصنيف بناءً على **Validation Macro-F1**.
+| Model                   | Val Macro-F1 | Test Macro-F1 |
+| ----------------------- | -----------: | ------------: |
+| TF-IDF + LinearSVC      |       0.6667 |        0.7333 |
+| Multilingual DistilBERT |       1.0000 |        0.8667 |
 
-* Best checkpoint: **Epoch 9**
-* Validation Macro-F1: **1.0000**
-* Baseline Validation Macro-F1: **0.6667**
-* Transformer Test Macro-F1: **0.8667**
-* Transformer Test Accuracy: **0.875**
-
-تم استخدام validation لاختيار checkpoint، ثم تم تقييم النموذج على test.
-
-### Execution type | نوع التنفيذ
-
-تم استخدام:
-
-**Partial Fine-tuning on CPU**
-
-* معظم طبقات Transformer كانت مجمدة.
-* تم تحديث آخر Transformer block وtask head.
-* لم يتم استخدام full fine-tuning بسبب قيود التنفيذ على CPU.
-
-### Split strategy & leakage evidence | استراتيجية التقسيم ودليل عدم التسرب
-
-تم تقسيم بيانات التصنيف إلى:
+Split:
 
 * Train: **24**
 * Validation: **8**
 * Test: **8**
-
-وكان:
-
 * `group_overlap = 0`
-* جميع الفئات الأربع موجودة في train/validation/test.
-* **Split contract = PASS**
 
-وبالتالي لا يوجد تداخل للمجموعات بين الـsplits في عينة التصنيف المستخدمة.
+NER alignment:
 
-### Baseline & Transformer metrics | مقاييس الـBaseline والـTransformer
+* أول subword يحصل على label.
+* continuation/special tokens = `-100`.
+* Strict entity boundaries.
 
-| Model                   | Validation Macro-F1 | Test Macro-F1 | Test Accuracy |
-| ----------------------- | ------------------: | ------------: | ------------: |
-| TF-IDF + LinearSVC      |              0.6667 |        0.7333 |             — |
-| Multilingual DistilBERT |              1.0000 |        0.8667 |         0.875 |
+NER F1: **0.5714**
 
-النتائج مصنفة **MEASURED_SMOKE** وليست benchmark إنتاجيًا.
+QA:
 
-### NER alignment policy | سياسة محاذاة NER
+* no-answer → `None`
+* reason → `no_answer_in_context`
+* Valid span test: **PASS**
+* No-answer test: **PASS**
 
-تم اعتماد المحاذاة التالية:
+### Evidence
 
-* أول subword للكلمة يحصل على label الكلمة.
-* continuation subwords تحصل على `-100`.
-* special tokens تحصل على `-100`.
-* يتم التعامل مع حدود الكيانات باستخدام **strict entity boundaries**.
+* Lab 3 commit: `b5672665d06a2119c17f167ee0797194e4820128`
+* Lab 4 commit: `5e3b7e50cff65c8eb54bc1382ad61951997576ea`
+* `DAY2_NOTEBOOK3_CORE=PASS`
+* `DAY2_NOTEBOOK4_CORE=PASS`
 
-Evidence:
+### Limitation
 
-* `NER alignment contract = PASS`
-* `Strict entity-boundary test = PASS`
-
-نتيجة NER على عينة الاختبار:
-
-* Precision: **0.6667**
-* Recall: **0.5000**
-* F1: **0.5714**
-
-### QA null policy | سياسة الإجابة الفارغة في QA
-
-إذا لم توجد إجابة صحيحة داخل الـcontext، يسمح النظام بإرجاع:
-
-`None`
-
-مع السبب:
-
-`no_answer_in_context`
-
-تم اختبار حالتي:
-
-* Valid answer span → **PASS**
-* No-answer → **PASS**
-
-كما تم التحقق من تحويل answer offsets إلى token positions.
-
-### What the small sample cannot prove | ما الذي لا تستطيع العينة الصغيرة إثباته
-
-العينة الحالية **لا تستطيع إثبات**:
-
-* جودة النموذج على بيانات حقيقية واسعة النطاق.
-* التعميم على جميع أنواع النصوص العربية والإنجليزية.
-* استقرار نتائج التصنيف أو NER أو QA على عينات أكبر.
-* عدم وجود مشاكل أداء أو تحيزات على بيانات الإنتاج.
-* أن نتيجة Validation Macro-F1 = 1.0000 تمثل أداءً إنتاجيًا.
-* جودة QA الفعلية؛ نتائج QA الحالية هي **smoke evidence** وليست accuracy benchmark.
-
-### Evidence | الدليل
-
-* **Lab 3 commit:** `b5672665d06a2119c17f167ee0797194e4820128`
-* **Lab 4 commit:** `5e3b7e50cff65c8eb54bc1382ad61951997576ea`
-* **Classification core:** `DAY2_NOTEBOOK3_CORE=PASS`
-* **NER/QA core:** `DAY2_NOTEBOOK4_CORE=PASS`
-* **Classification split isolation:** `PASS`
-* **NER alignment:** `PASS`
-* **QA post-processing:** `PASS`
-
-### Consequences and rollback | الأثر والرجوع
-
-* **Positive consequence:** أصبح لدى المشروع baseline واضح، Transformer checkpoint محدد، split موثق، وسياسات NER وQA قابلة للاختبار.
-* **Limitation/new risk:** صغر البيانات يجعل النتائج مناسبة لإثبات صحة الـpipeline فقط، وليس لتقدير الأداء الإنتاجي.
-* **Rollback trigger:** ظهور تسرب بيانات أو تدهور واضح عند استخدام بيانات أكبر وأكثر واقعية.
-* **Rollback path:** إعادة بناء الـsplit أو تعديل checkpoint/training configuration وإعادة تشغيل التقييم والاختبارات.
-
-
-------------------------------------------------
+البيانات صغيرة ونتائجها **MEASURED_SMOKE**؛ لا تمثل أداءً إنتاجيًا.
 
 ---
 
-## قرارات إلزامية قبل Gate E
+## Decision D-003 — Arabic Preprocessing Profile
 
-* [x] tokenizer + max length.
-* [ ] Arabic preprocessing profile.
-* [ ] task model/baseline and split.
-* [ ] semantic encoder/index/k/threshold.
-* [ ] metric/slices/error priorities.
-* [ ] performance budget.
-* [ ] ONNX/INT8 adopt or reject.
-* [ ] served artefact + preprocessing/label versions.
+* **Date:** 2026-09-30
+* **Gate:** C
+* **Status:** accepted
+* **Owner:** Student
+
+### Decision
+
+اعتماد **Two-Copy Contract**:
+
+* `display_text`: النص الأصلي ولا يتم تغييره.
+* `model_text`: نسخة معالجة للاستخدام في النموذج والبحث.
+
+Profile:
+
+`search/1.0.0`
+
+ويشمل إزالة التشكيل و`tatweel`، وتوحيد الألف و`alef maksura`، مع الحفاظ على `taa marbuta`.
+
+تم تثبيت:
+
+`camel-tools==1.6.0`
+
+Arabizi يتم التعامل معه كـ`passthrough`، والـheuristic ليس classifier.
+
+### Evidence
+
+* Golden tests: **4/4 PASS**
+* `display_copy_preserved=True`
+* `named_profile=True`
+* `DAY3_NOTEBOOK5_CORE=PASS`
+* `reports/bayan_arabic_profile.json`
+
+مقارنة smoke على Gulf:
+
+* Multilingual DistilBERT: **F1 = 0.0000**
+* CAMeLBERT-DA: **F1 = 0.6667**
+
+المقارنة على **4 أمثلة فقط وseed واحد**، ولا تثبت تفوقًا عامًا.
+
+### Rollback
+
+إصدار profile جديد إذا ظهرت مشاكل preprocessing على بيانات المشروع الفعلية.
+
+---
+
+## Decision D-004 — Bilingual Semantic Search
+
+* **Date:** 2026-09-30
+* **Gate:** C
+* **Status:** accepted
+* **Owner:** Student
+
+### Decision
+
+اعتماد:
+
+* Encoder: `paraphrase-multilingual-MiniLM-L12-v2`
+* Dimension: **384**
+* Normalization: **L2**
+* Index: **FAISS IndexFlatIP**
+* `k = 3`
+
+No-answer threshold تم ضبطه على validation فقط:
+
+`0.4592`
+
+ثم تم تجميده قبل test.
+
+### Evidence
+
+Test answerable:
+
+* Recall@3: **1.0000**
+* MRR@3: **0.6667**
+* Queries: **6**
+
+No-answer accuracy:
+
+* Validation: **1.0000**
+* Test: **1.0000**
+
+Reranker:
+
+`cross-encoder/mmarco-mMiniLMv2-L12-H384-v1`
+
+* MRR قبل: **0.6667**
+* MRR بعد: **0.7222**
+* Delta: **+0.0556**
+* Decision: `ADOPT_FOR_EXPERIMENT`
+
+Evidence:
+
+* `reports/search_manifest.json`
+* `reports/retrieval_metrics.json`
+* `DAY3_NOTEBOOK6_CORE=PASS`
+
+### Limitation
+
+النتائج **MEASURED_SMOKE** وعلى بيانات synthetic صغيرة.
+
+---
+
+## Decision D-005 — Evaluation & Error Analysis
+
+* **Date:** 2026-09-30
+* **Gate:** C
+* **Status:** accepted
+* **Owner:** Student
+
+### Decision
+
+اعتماد التقييم باستخدام:
+
+* Macro-F1
+* 95% Bootstrap CI
+* Paired comparison
+* Sliced evaluation
+* Behavioural tests
+* Manual error taxonomy
+
+التقييم تم على **validation فقط** باستخدام `COURSE_FIXTURE`.
+
+### Evidence
+
+Macro-F1:
+
+| Version |     F1 |        95% CI |
+| ------- | -----: | ------------: |
+| A       | 0.7807 | 0.6212–0.8982 |
+| B       | 0.7819 | 0.6169–0.9042 |
+
+Paired B−A:
+
+* Difference: **+0.0012**
+* 95% CI: **-0.1047 إلى +0.0996**
+* Directional claim: **Not supported**
+
+Behavioural tests:
+
+* **3/6 PASS**
+* Pass rate: **50%**
+
+Taxonomy:
+
+* `dialect_gap`: **3**
+* `hard_or_ambiguous`: **3**
+* `class_confusion`: **2**
+
+### Ranked fixes
+
+1. زيادة ومراجعة أمثلة Gulf للصحة والنقل.
+2. إضافة contrastive examples لتقليل class confusion.
+3. معالجة الطلبات القصيرة والملتبسة بإضافة context أو abstention عند الحاجة.
+
+### Evidence
+
+* `reports/day3_evaluation_fixture.json`
+* `reports/day3_slice_report.csv`
+* `reports/day3_error_taxonomy.csv`
+* `DAY3_NOTEBOOK7_CORE=PASS`
+
+### Limitation
+
+النتائج مبنية على `COURSE_FIXTURE` صغيرة، لذلك لا تمثل أداء المشروع الحقيقي أو الإنتاج.
+
+---
+
+# قرارات إلزامية قبل Gate E
+
+* [x] tokenizer + max length
+* [x] Arabic preprocessing profile
+* [x] task model/baseline and split
+* [x] semantic encoder/index/k/threshold
+* [x] metric/slices/error priorities
+* [ ] performance budget
+* [ ] ONNX/INT8 adopt or reject
+* [ ] served artefact + preprocessing/label versions
