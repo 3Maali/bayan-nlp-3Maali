@@ -1,0 +1,154 @@
+{
+  "result_label": "SYSTEMS_SMOKE",
+  "artefact_role": "SYSTEMS_SMOKE",
+  "warning": "SYSTEMS_SMOKE proves mechanics only; replace with PROJECT_ARTIFACT for Gate D.",
+  "environment": {
+    "python": "3.13.15",
+    "platform": "Linux-6.6.122+-x86_64-with-glibc2.39",
+    "torch": "2.11.0+cpu",
+    "onnx": "1.22.0",
+    "onnxruntime": "1.29.0",
+    "device": "cpu",
+    "ort_provider": "CPUExecutionProvider"
+  },
+  "workload": {
+    "rows": 8,
+    "rows_measured_per_repetition": 8,
+    "batch_size": 4,
+    "languages": [
+      "ar",
+      "en"
+    ],
+    "sha256": "1d1d1c3bef8a582931f6a1c1803671e8fe194fc36ae59cdc4f4feca9fc4d6785",
+    "length": {
+      "p50_tokens": 18.0,
+      "p95_tokens": 28.95,
+      "max_tokens": 30,
+      "configured_max_length": 96,
+      "would_truncate": 0
+    }
+  },
+  "budget": {
+    "max_p95_ms": 1000.0,
+    "min_throughput_items_s": 0.1,
+    "max_quality_tax": 0.05,
+    "target_device": "colab-cpu"
+  },
+  "budget_provenance": "COURSE_EXAMPLE_FOR_SYSTEMS_SMOKE",
+  "measurement": {
+    "warmup": 5,
+    "repetitions": 30,
+    "boundary": "model_only_primary_and_pytorch_end_to_end_secondary",
+    "memory_method": "process RSS start and observed peak; approximate"
+  },
+  "pytorch_fp32": {
+    "model_only": {
+      "warmup": 5,
+      "repetitions": 30,
+      "items_per_call": 8,
+      "p50_ms": 14.156661,
+      "p95_ms": 19.85466015,
+      "p99_ms": 21.57286486,
+      "mean_ms": 14.677862699999999,
+      "min_ms": 11.743442,
+      "max_ms": 21.85691,
+      "throughput_items_s": 545.0384816585047,
+      "rss_start_mb": 655.10546875,
+      "rss_peak_observed_mb": 655.16015625,
+      "rss_observed_delta_mb": 0.0546875
+    },
+    "end_to_end": {
+      "warmup": 5,
+      "repetitions": 30,
+      "items_per_call": 8,
+      "p50_ms": 14.115473,
+      "p95_ms": 18.359850700000003,
+      "p99_ms": 20.374223710000003,
+      "mean_ms": 14.008367533333335,
+      "min_ms": 10.625443,
+      "max_ms": 20.954311,
+      "throughput_items_s": 571.087243461007,
+      "rss_start_mb": 655.25390625,
+      "rss_peak_observed_mb": 655.41015625,
+      "rss_observed_delta_mb": 0.15625
+    },
+    "parameter_size_mib": 16.732433319091797,
+    "state_sha256": "3f24ce76e750a66daab90a7e152007cd5dad055ff59c6dc0bf462e9168ac5a73",
+    "quality_metric": "prediction_agreement_to_fp32_not_task_quality",
+    "quality": 1.0
+  },
+  "onnx_fp32": {
+    "model_only": {
+      "warmup": 5,
+      "repetitions": 30,
+      "items_per_call": 8,
+      "p50_ms": 5.697563499999999,
+      "p95_ms": 6.803193350000001,
+      "p99_ms": 6.8409051199999995,
+      "mean_ms": 5.847062566666667,
+      "min_ms": 5.340537,
+      "max_ms": 6.850409,
+      "throughput_items_s": 1368.2083796412487,
+      "rss_start_mb": 742.8125,
+      "rss_peak_observed_mb": 742.8125,
+      "rss_observed_delta_mb": 0.0
+    },
+    "parity": {
+      "max_abs_logits_diff": 2.086162567138672e-07,
+      "mean_abs_logits_diff": 7.446700323043842e-08,
+      "prediction_agreement": 1.0
+    },
+    "size_mib": 16.787826538085938,
+    "sha256": "2c9fd6605f57385c50c0957868853a1b1ab7e9ce0a49cb1a907194477a4b3edd",
+    "quality": 1.0,
+    "quality_tax": 0.0,
+    "budget": {
+      "latency_ok": true,
+      "quality_ok": true,
+      "throughput_ok": true,
+      "budget_met": true
+    },
+    "p95_speedup_vs_pytorch": 2.9184324373200417
+  },
+  "onnx_dynamic_int8": {
+    "status": {
+      "attempted": true,
+      "available": true,
+      "error": null
+    },
+    "model_only": {
+      "warmup": 5,
+      "repetitions": 30,
+      "items_per_call": 8,
+      "p50_ms": 4.5905625,
+      "p95_ms": 6.76621075,
+      "p99_ms": 6.98374213,
+      "mean_ms": 5.077821666666667,
+      "min_ms": 4.376212,
+      "max_ms": 7.063435,
+      "throughput_items_s": 1575.4787239803943,
+      "rss_start_mb": 744.0,
+      "rss_peak_observed_mb": 744.0,
+      "rss_observed_delta_mb": 0.0
+    },
+    "parity": {
+      "max_abs_logits_diff": 0.028613325208425522,
+      "mean_abs_logits_diff": 0.010538831353187561,
+      "prediction_agreement": 1.0
+    },
+    "size_mib": 4.287415504455566,
+    "sha256": "1590b1c845584fc6e5d7c0abd128d752877428a89b20002cf11ba787f56f17e9",
+    "quality": 1.0,
+    "quality_tax": 0.0,
+    "budget": {
+      "latency_ok": true,
+      "quality_ok": true,
+      "throughput_ok": true,
+      "budget_met": true
+    }
+  },
+  "selected_for_service": "onnx-dynamic-int8",
+  "adoption_decision": "ADOPT_INT8",
+  "decision_scope": "SYSTEMS_SMOKE_NOT_A_SHIP_DECISION",
+  "fp32_rollback": "Re-export from recorded MODEL_SOURCE; weights stay outside GitHub."
+}

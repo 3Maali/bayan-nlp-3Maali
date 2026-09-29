@@ -1,0 +1,35 @@
+{
+  "result_label": "SYSTEMS_SMOKE",
+  "artefact_role": "SYSTEMS_SMOKE",
+  "manifest": {
+    "model_id": "google/bert_uncased_L-2_H-128_A-2",
+    "model_version": "systems-smoke-v1",
+    "preprocessing_version": "ar-en-v1",
+    "runtime": "onnx-dynamic-int8",
+    "label_map": {
+      "0": "LABEL_0",
+      "1": "LABEL_1",
+      "2": "LABEL_2"
+    },
+    "artifact_sha256": "1590b1c845584fc6e5d7c0abd128d752877428a89b20002cf11ba787f56f17e9"
+  },
+  "tests": {
+    "health": 200,
+    "arabic": 200,
+    "english": 200,
+    "empty_rejected": 422,
+    "unsupported_language_rejected": 422,
+    "canaries": [
+      {
+        "name": "arabic-contract",
+        "status": "PASS",
+        "label": "LABEL_1"
+      },
+      {
+        "name": "english-contract",
+        "status": "PASS",
+        "label": "LABEL_1"
+      }
+    ]
+  }
+}
