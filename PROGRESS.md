@@ -22,7 +22,7 @@ Status values: `⬜ NOT_STARTED`, `🟨 IN_PROGRESS`, `✅ PASSED`, `🟥 BLOCKE
 | ------------ | ------------------ | -------------------------- | --------------------- |
 | 00           | FILL_ME            | runtime checks             |                |
 | 01           | 2026-09-30         | `DAY1_NOTEBOOK1_CORE=PASS` | [Lab1](https://github.com/3Maali/bayan-nlp-3Maali/blob/main/notebooks/01_text_processing_tokenization.ipynb)           |
-| 02           | 2026-09-30         | `DAY1_NOTEBOOK2_CORE=PASS` | FILL_ME               |
+| 02           | 2026-09-30         | `DAY1_NOTEBOOK2_CORE=PASS` | [Lab2](https://github.com/3Maali/bayan-nlp-3Maali/blob/main/notebooks/02_attention_transformers.ipynb)               |
 | 03           | FILL_ME            | `DAY2_NOTEBOOK3_CORE=PASS` | FILL_ME               |
 | 04           | FILL_ME            | `DAY2_NOTEBOOK4_CORE=PASS` | FILL_ME               |
 | 05           | FILL_ME            | `DAY3_NOTEBOOK5_CORE=PASS` | FILL_ME               |
