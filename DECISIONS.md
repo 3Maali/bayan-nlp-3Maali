@@ -41,6 +41,134 @@
 * **Rollback trigger:** إذا أظهرت بيانات المشروع الفعلية نسبة truncation مرتفعة أو أثرًا واضحًا على جودة المهام بسبب طول التسلسل.
 * **Rollback path:** إعادة تقييم `max_length` واختيار قيمة أعلى بناءً على قياسات بيانات المشروع، مع الحفاظ على mBERT tokenizer ما لم تظهر مشكلة مرتبطة بالـtokenizer نفسه.
 
+-------
+
+## Decision D-002 — Day 2 Classification, NER & QA
+
+* **Date:** 2026-09-30
+* **Gate:** B
+* **Status:** accepted
+* **Owner:** Student
+
+### Context | السياق
+
+تم تنفيذ مهام التصنيف وNER وExtractive QA باستخدام بيانات صناعية صغيرة، مع مقارنة baseline بسيط بنموذج multilingual Transformer. الهدف هو إثبات صحة الـpipeline والتقييم، وليس إثبات أداء إنتاجي.
+
+### Checkpoint | نقطة الحفظ
+
+تم اعتماد أفضل checkpoint للتصنيف بناءً على **Validation Macro-F1**.
+
+* Best checkpoint: **Epoch 9**
+* Validation Macro-F1: **1.0000**
+* Baseline Validation Macro-F1: **0.6667**
+* Transformer Test Macro-F1: **0.8667**
+* Transformer Test Accuracy: **0.875**
+
+تم استخدام validation لاختيار checkpoint، ثم تم تقييم النموذج على test.
+
+### Execution type | نوع التنفيذ
+
+تم استخدام:
+
+**Partial Fine-tuning on CPU**
+
+* معظم طبقات Transformer كانت مجمدة.
+* تم تحديث آخر Transformer block وtask head.
+* لم يتم استخدام full fine-tuning بسبب قيود التنفيذ على CPU.
+
+### Split strategy & leakage evidence | استراتيجية التقسيم ودليل عدم التسرب
+
+تم تقسيم بيانات التصنيف إلى:
+
+* Train: **24**
+* Validation: **8**
+* Test: **8**
+
+وكان:
+
+* `group_overlap = 0`
+* جميع الفئات الأربع موجودة في train/validation/test.
+* **Split contract = PASS**
+
+وبالتالي لا يوجد تداخل للمجموعات بين الـsplits في عينة التصنيف المستخدمة.
+
+### Baseline & Transformer metrics | مقاييس الـBaseline والـTransformer
+
+| Model                   | Validation Macro-F1 | Test Macro-F1 | Test Accuracy |
+| ----------------------- | ------------------: | ------------: | ------------: |
+| TF-IDF + LinearSVC      |              0.6667 |        0.7333 |             — |
+| Multilingual DistilBERT |              1.0000 |        0.8667 |         0.875 |
+
+النتائج مصنفة **MEASURED_SMOKE** وليست benchmark إنتاجيًا.
+
+### NER alignment policy | سياسة محاذاة NER
+
+تم اعتماد المحاذاة التالية:
+
+* أول subword للكلمة يحصل على label الكلمة.
+* continuation subwords تحصل على `-100`.
+* special tokens تحصل على `-100`.
+* يتم التعامل مع حدود الكيانات باستخدام **strict entity boundaries**.
+
+Evidence:
+
+* `NER alignment contract = PASS`
+* `Strict entity-boundary test = PASS`
+
+نتيجة NER على عينة الاختبار:
+
+* Precision: **0.6667**
+* Recall: **0.5000**
+* F1: **0.5714**
+
+### QA null policy | سياسة الإجابة الفارغة في QA
+
+إذا لم توجد إجابة صحيحة داخل الـcontext، يسمح النظام بإرجاع:
+
+`None`
+
+مع السبب:
+
+`no_answer_in_context`
+
+تم اختبار حالتي:
+
+* Valid answer span → **PASS**
+* No-answer → **PASS**
+
+كما تم التحقق من تحويل answer offsets إلى token positions.
+
+### What the small sample cannot prove | ما الذي لا تستطيع العينة الصغيرة إثباته
+
+العينة الحالية **لا تستطيع إثبات**:
+
+* جودة النموذج على بيانات حقيقية واسعة النطاق.
+* التعميم على جميع أنواع النصوص العربية والإنجليزية.
+* استقرار نتائج التصنيف أو NER أو QA على عينات أكبر.
+* عدم وجود مشاكل أداء أو تحيزات على بيانات الإنتاج.
+* أن نتيجة Validation Macro-F1 = 1.0000 تمثل أداءً إنتاجيًا.
+* جودة QA الفعلية؛ نتائج QA الحالية هي **smoke evidence** وليست accuracy benchmark.
+
+### Evidence | الدليل
+
+* **Lab 3 commit:** `b5672665d06a2119c17f167ee0797194e4820128`
+* **Lab 4 commit:** `5e3b7e50cff65c8eb54bc1382ad61951997576ea`
+* **Classification core:** `DAY2_NOTEBOOK3_CORE=PASS`
+* **NER/QA core:** `DAY2_NOTEBOOK4_CORE=PASS`
+* **Classification split isolation:** `PASS`
+* **NER alignment:** `PASS`
+* **QA post-processing:** `PASS`
+
+### Consequences and rollback | الأثر والرجوع
+
+* **Positive consequence:** أصبح لدى المشروع baseline واضح، Transformer checkpoint محدد، split موثق، وسياسات NER وQA قابلة للاختبار.
+* **Limitation/new risk:** صغر البيانات يجعل النتائج مناسبة لإثبات صحة الـpipeline فقط، وليس لتقدير الأداء الإنتاجي.
+* **Rollback trigger:** ظهور تسرب بيانات أو تدهور واضح عند استخدام بيانات أكبر وأكثر واقعية.
+* **Rollback path:** إعادة بناء الـsplit أو تعديل checkpoint/training configuration وإعادة تشغيل التقييم والاختبارات.
+
+
+------------------------------------------------
+
 ---
 
 ## قرارات إلزامية قبل Gate E
