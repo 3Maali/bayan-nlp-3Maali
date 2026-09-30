@@ -1,0 +1,32 @@
+{
+  "course": "Bayan Applied NLP",
+  "author": "Meaad Al-Marri",
+  "checked_at_utc": "2026-09-30T13:34:47.843691+00:00",
+  "in_colab": true,
+  "python": "3.13.15",
+  "platform": "Linux-6.6.122+-x86_64-with-glibc2.39",
+  "device": "cpu",
+  "gpu_name": null,
+  "disk_free_gib": 87.23,
+  "packages": {
+    "numpy": "2.1.3",
+    "pandas": "2.2.3",
+    "scikit-learn": "1.6.1",
+    "torch": "2.11.0+cpu"
+  },
+  "connectivity": {
+    "github_raw": true,
+    "pypi": true,
+    "huggingface_models": true
+  },
+  "core_checks": {
+    "python_3_10_or_newer": true,
+    "utf8_round_trip": true,
+    "numpy_available": true,
+    "pandas_available": true,
+    "sklearn_available": true,
+    "torch_available": true,
+    "disk_has_1_gib_free": true
+  },
+  "bayan_env_ready": true
+}
