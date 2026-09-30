@@ -52,12 +52,12 @@
 
 ## رحلة المشروع | Project Journey
 
-| اليوم | المجال                         | المخرجات                                      |
-| ----- | ------------------------------ | --------------------------------------------- |
-| Day 1 | Text Processing & Tokenization | preprocessing + tokenizer decision            |
-| Day 2 | Classification, NER & QA       | classification model + NER + QA               |
-| Day 3 | Arabic NLP & Search            | Arabic profile + semantic search + evaluation |
-| Day 4 | Optimization & Serving         | ONNX + INT8 evaluation + FastAPI              |
+| **اليوم** | **المجال**                     | **المخرجات**                                  |
+| --------- | ------------------------------ | --------------------------------------------- |
+| Day 1     | Text Processing & Tokenization | preprocessing + tokenizer decision            |
+| Day 2     | Classification, NER & QA       | classification model + NER + QA               |
+| Day 3     | Arabic NLP & Search            | Arabic profile + semantic search + evaluation |
+| Day 4     | Optimization & Serving         | ONNX + INT8 evaluation + FastAPI              |
 
 ---
 
@@ -65,17 +65,17 @@
 
 روابط دفاتر المشروع الرسمية:
 
-| #  | Notebook                       | Colab                                                                                                                                       | Purpose     |
-| -- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| 00 | Runtime Doctor                 | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/00_runtime_doctor.ipynb)               | Environment |
-| 01 | Text Processing & Tokenization | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/01_text_processing_tokenization.ipynb) | Gate A      |
-| 02 | Attention & Transformers       | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/02_attention_transformers.ipynb)       | T2          |
-| 03 | Text Classification            | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/03_text_classification.ipynb)          | Gate B      |
-| 04 | NER & QA                       | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/04_ner_and_qa.ipynb)                   | Gate B      |
-| 05 | Arabic NLP                     | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/05_arabic_nlp.ipynb)                   | Gate C      |
-| 06 | Semantic Search                | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/06_semantic_search.ipynb)              | Gate C      |
-| 07 | Evaluation & Error Analysis    | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/07_evaluation_error_analysis.ipynb)    | Gate C      |
-| 08 | Optimization & Serving         | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/08_optimization_serving.ipynb)         | Gate D      |
+| **#** | **Notebook**                   | **Colab**                                                                                                                                   | **Purpose** |
+| ----- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| 00    | Runtime Doctor                 | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/00_runtime_doctor.ipynb)               | Environment |
+| 01    | Text Processing & Tokenization | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/01_text_processing_tokenization.ipynb) | Gate A      |
+| 02    | Attention & Transformers       | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/02_attention_transformers.ipynb)       | T2          |
+| 03    | Text Classification            | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/03_text_classification.ipynb)          | Gate B      |
+| 04    | NER & QA                       | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/04_ner_and_qa.ipynb)                   | Gate B      |
+| 05    | Arabic NLP                     | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/05_arabic_nlp.ipynb)                   | Gate C      |
+| 06    | Semantic Search                | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/06_semantic_search.ipynb)              | Gate C      |
+| 07    | Evaluation & Error Analysis    | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/07_evaluation_error_analysis.ipynb)    | Gate C      |
+| 08    | Optimization & Serving         | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/08_optimization_serving.ipynb)         | Gate D      |
 
 ### Final notebook
 
@@ -97,10 +97,10 @@
 
 تمت مقارنة **Local WordPiece** مع **mBERT tokenizer** على عينة تعليمية صغيرة.
 
-| Tokenizer       | Arabic Fertility | English Fertility | Truncation |
-| --------------- | ---------------: | ----------------: | ---------: |
-| Local WordPiece |             1.39 |              1.32 |         0% |
-| mBERT           |             2.89 |              1.57 |        40% |
+| **Tokenizer**   | **Arabic Fertility** | **English Fertility** | **Truncation** |
+| --------------- | -------------------: | --------------------: | -------------: |
+| Local WordPiece |                 1.39 |                  1.32 |             0% |
+| mBERT           |                 2.89 |                  1.57 |            40% |
 
 القرار النهائي:
 
@@ -244,7 +244,7 @@
 
 ## Performance Budget
 
-| المعيار             |        الحد |
+| **المعيار**         |    **الحد** |
 | ------------------- | ----------: |
 | Maximum p95 latency |     1000 ms |
 | Minimum throughput  | 0.1 items/s |
@@ -253,11 +253,11 @@
 
 ## النتائج
 
-| Candidate         |           p95 |        Throughput |    Quality | Quality Tax | القرار   |
-| ----------------- | ------------: | ----------------: | ---------: | ----------: | -------- |
-| PyTorch FP32      |     394.44 ms |     27.80 items/s |     1.0000 |      0.0000 | Baseline |
-| ONNX FP32         | **340.68 ms** | **30.99 items/s** | **1.0000** |  **0.0000** | Adopt    |
-| ONNX Dynamic INT8 |     208.94 ms |     50.16 items/s |     0.4345 |      0.5655 | Reject   |
+| **Candidate**     |       **p95** |    **Throughput** | **Quality** | **Quality Tax** | **القرار** |
+| ----------------- | ------------: | ----------------: | ----------: | --------------: | ---------- |
+| PyTorch FP32      |     394.44 ms |     27.80 items/s |      1.0000 |          0.0000 | Baseline   |
+| ONNX FP32         | **340.68 ms** | **30.99 items/s** |  **1.0000** |      **0.0000** | Adopt      |
+| ONNX Dynamic INT8 |     208.94 ms |     50.16 items/s |      0.4345 |          0.5655 | Reject     |
 
 **القرار:** `ADOPT_ONNX_FP32`
 
@@ -297,6 +297,57 @@
 
 # Architecture
 
+## Encoder data flow | مسار المدخل عبر المشفّر
+
+يمر النص العربي أو الإنجليزي أولًا عبر المعالجة والترميز، ثم عبر طبقات الـTransformer Encoder قبل الوصول إلى الرأس الخاص بالمهمة أو إلى تمثيل embedding.
+
+```text
+Arabic / English Text
+        │
+        ▼
+     Tokenizer
+        │
+        ├── Input IDs
+        └── Attention Mask
+                │
+                ▼
+       Token / Position Embeddings
+                │
+                ▼
+        Transformer Encoder
+        ┌───────┴────────┐
+        │                │
+   Self-Attention    Feed-Forward
+        │                │
+        └───────┬────────┘
+                ▼
+      Contextual Hidden States
+                │
+        ┌───────┼──────────────┐
+        ▼       ▼              ▼
+   Task Head   Token       Text Embedding
+ Classification Representations   │
+        │       │              ▼
+        │       │             FAISS
+        │       │              │
+        │       ▼              ▼
+        │      NER         Reranking
+        │
+        ▼
+ Topic / Sentiment
+```
+
+في بداية المسار، يحول الـTokenizer النص إلى `input_ids`، بينما يحدد `attention_mask` الـtokens الحقيقية ومواقع الـpadding. تدخل هذه التمثيلات إلى طبقات الـTransformer Encoder، حيث تستخدم Self-Attention لبناء تمثيلات سياقية، ثم تمر عبر Feed-Forward وعمليات Residual/Layer Normalization.
+
+بعد طبقات الـEncoder ينتج النموذج **Contextual Hidden States**. يختلف الجزء المستخدم بعد ذلك حسب المهمة:
+
+* **Classification:** تمرير التمثيل المناسب إلى Classification Head لإنتاج فئة الموضوع أو المشاعر.
+* **NER:** استخدام تمثيل كل Token لإنتاج تصنيف الكيانات.
+* **Extractive QA:** استخدام تمثيلات الـTokens لتحديد موضع بداية ونهاية الإجابة، مع دعم `no-answer`.
+* **Semantic Search:** تحويل النص إلى Text Embedding ثم استخدام FAISS للاسترجاع، مع إمكانية تطبيق Reranking.
+
+## Project pipeline
+
 ```text
                     Arabic / English Text
                             │
@@ -325,20 +376,40 @@
                  ONNX / FastAPI Serving
 ```
 
+## Attention mask
+
+يمنع `attention_mask` مواقع الـpadding من المشاركة في حساب Attention.
+
+تم إجراء فحص خاص في:
+
+`notebooks/02_attention_transformers.ipynb`
+
+باستخدام جمل عربية بأطوال مختلفة. أظهر الفحص أن أوزان Attention المتجهة إلى مواقع الـpadding كانت `0.0`:
+
+```text
+ARABIC_PADDING_MASK_CHECK=PASS
+```
+
+## حدود تفسير Attention
+
+أوزان Attention تصف كيفية توزيع الوزن داخل طبقة Attention أثناء الحساب، لكنها **لا تثبت وحدها سبب قرار النموذج ولا تمثل تفسيرًا سببيًا**.
+
+لذلك لا تُستخدم خريطة Attention واحدة كدليل نهائي على سبب تصنيف أو تنبؤ النموذج. يتطلب الادعاء التفسيري اختبارات إضافية، مثل الإزالة أو التبديل أو أساليب Attribution مناسبة.
+
 ---
 
 # النتائج الرئيسية | Results
 
-| Component            | Metric               | Result                       | Evidence             |
-| -------------------- | -------------------- | ---------------------------- | -------------------- |
-| Topic classification | Test Macro-F1        | **0.8667 — MEASURED_SMOKE**  | `DECISIONS.md` D-002 |
-| Topic classification | Test Accuracy        | **0.8750 — MEASURED_SMOKE**  | `DECISIONS.md` D-002 |
-| NER                  | Entity F1            | **0.5714 — MEASURED_SMOKE**  | `DECISIONS.md` D-002 |
-| Semantic Search      | Recall@3             | **1.0000 — MEASURED_SMOKE**  | `DECISIONS.md` D-004 |
-| Semantic Search      | MRR@3                | **0.6667 — MEASURED_SMOKE**  | `DECISIONS.md` D-004 |
-| Serving              | ONNX FP32 p95        | **340.68 ms — MEASURED**     | `BENCHMARKS.md`      |
+| **Component**        | **Metric**           |                   **Result** | **Evidence**         |
+| -------------------- | -------------------- | ---------------------------: | -------------------- |
+| Topic classification | Test Macro-F1        |  **0.8667 — MEASURED_SMOKE** | `DECISIONS.md` D-002 |
+| Topic classification | Test Accuracy        |  **0.8750 — MEASURED_SMOKE** | `DECISIONS.md` D-002 |
+| NER                  | Entity F1            |  **0.5714 — MEASURED_SMOKE** | `DECISIONS.md` D-002 |
+| Semantic Search      | Recall@3             |  **1.0000 — MEASURED_SMOKE** | `DECISIONS.md` D-004 |
+| Semantic Search      | MRR@3                |  **0.6667 — MEASURED_SMOKE** | `DECISIONS.md` D-004 |
+| Serving              | ONNX FP32 p95        |     **340.68 ms — MEASURED** | `BENCHMARKS.md`      |
 | Serving              | ONNX FP32 throughput | **30.99 items/s — MEASURED** | `BENCHMARKS.md`      |
-| Serving              | Quality tax          | **0.0000 — MEASURED**        | `BENCHMARKS.md`      |
+| Serving              | Quality tax          |        **0.0000 — MEASURED** | `BENCHMARKS.md`      |
 
 ---
 
@@ -437,6 +508,20 @@
 
 `BENCHMARKS.md`
 
+**6. Attention & Transformer Verification**
+
+في:
+
+`notebooks/02_attention_transformers.ipynb`
+
+نفذت Scaled Dot-Product Attention، وفحصت دلالة الأقنعة، وتتبعت الـforward pass الفعلي لنموذج متعدد اللغات. كما أضفت فحصًا خاصًا لـArabic Padding Mask للتحقق من عدم حصول مواقع الـpadding على Attention.
+
+الدليل:
+
+* `ARABIC_PADDING_MASK_CHECK=PASS`
+* `DAY1_NOTEBOOK2_CORE=PASS`
+* شرح مسار الـEncoder وحدود تفسير Attention داخل Notebook 02 وREADME.
+
 ---
 
 # AI Assistance
@@ -472,13 +557,11 @@ This educational project was developed during:
 
 في سياق **SDAIA Academy**.
 
-**Academy | الأكاديمية:**
-https://github.com/SDAIAAcademy
+**Academy | الأكاديمية:** https://github.com/SDAIAAcademy
 
 **Trainer | المدربة:** Meaad Al-Marri — ميعاد المري
 
-**Course source:**
-https://github.com/almiyead-rgb/bayan-applied-nlp-course
+**Course source:** https://github.com/almiyead-rgb/bayan-applied-nlp-course
 
 **#SDAIAAcademy**
 
