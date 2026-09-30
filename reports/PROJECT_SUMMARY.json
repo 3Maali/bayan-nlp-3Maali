@@ -1,0 +1,20 @@
+{
+  "student_github": "3Maali",
+  "repository_url": "https://github.com/3Maali/bayan-nlp-3Maali",
+  "languages": ["ar", "en"],
+  "tasks": [
+    "classification",
+    "sentiment",
+    "ner",
+    "qa",
+    "semantic_search"
+  ],
+  "extension": {
+    "name": "ONNX FP32 optimized serving with dynamic INT8 evaluation",
+    "evidence": "BENCHMARKS.md and Lab 8 optimization/serving notebook; ONNX FP32 met the project budget with 340.68 ms p95 model-only latency, 30.99 items/s throughput, 1.0 prediction agreement, and 0.0 quality tax. Dynamic INT8 was evaluated but rejected because its quality tax was 0.5655."
+  },
+  "benchmark_mode": "PROJECT_ARTIFACT",
+  "final_tag": "submission-v1.0",
+  "privacy_check": false,
+  "tests_passed": false
+}
