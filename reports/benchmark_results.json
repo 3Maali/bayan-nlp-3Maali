@@ -1,7 +1,7 @@
 {
-  "result_label": "SYSTEMS_SMOKE",
-  "artefact_role": "SYSTEMS_SMOKE",
-  "warning": "SYSTEMS_SMOKE proves mechanics only; replace with PROJECT_ARTIFACT for Gate D.",
+  "result_label": "MEASURED",
+  "artefact_role": "PROJECT_ARTIFACT",
+  "warning": null,
   "environment": {
     "python": "3.13.15",
     "platform": "Linux-6.6.122+-x86_64-with-glibc2.39",
@@ -19,11 +19,11 @@
       "ar",
       "en"
     ],
-    "sha256": "1d1d1c3bef8a582931f6a1c1803671e8fe194fc36ae59cdc4f4feca9fc4d6785",
+    "sha256": "9b07010d0e607282b66a0a1b1096175fd6015a237577db26bf03366393e077d8",
     "length": {
-      "p50_tokens": 18.0,
-      "p95_tokens": 28.95,
-      "max_tokens": 30,
+      "p50_tokens": 11.0,
+      "p95_tokens": 14.649999999999999,
+      "max_tokens": 15,
       "configured_max_length": 96,
       "would_truncate": 0
     }
@@ -34,7 +34,7 @@
     "max_quality_tax": 0.05,
     "target_device": "colab-cpu"
   },
-  "budget_provenance": "COURSE_EXAMPLE_FOR_SYSTEMS_SMOKE",
+  "budget_provenance": "STUDENT_DEFINED_BEFORE_MEASUREMENT",
   "measurement": {
     "warmup": 5,
     "repetitions": 30,
@@ -46,35 +46,35 @@
       "warmup": 5,
       "repetitions": 30,
       "items_per_call": 8,
-      "p50_ms": 14.156661,
-      "p95_ms": 19.85466015,
-      "p99_ms": 21.57286486,
-      "mean_ms": 14.677862699999999,
-      "min_ms": 11.743442,
-      "max_ms": 21.85691,
-      "throughput_items_s": 545.0384816585047,
-      "rss_start_mb": 655.10546875,
-      "rss_peak_observed_mb": 655.16015625,
-      "rss_observed_delta_mb": 0.0546875
+      "p50_ms": 244.1244285,
+      "p95_ms": 394.44218745,
+      "p99_ms": 402.34153487,
+      "mean_ms": 287.72101223333334,
+      "min_ms": 224.138584,
+      "max_ms": 402.371404,
+      "throughput_items_s": 27.804712411870128,
+      "rss_start_mb": 5296.28515625,
+      "rss_peak_observed_mb": 5296.28515625,
+      "rss_observed_delta_mb": 0.0
     },
     "end_to_end": {
       "warmup": 5,
       "repetitions": 30,
       "items_per_call": 8,
-      "p50_ms": 14.115473,
-      "p95_ms": 18.359850700000003,
-      "p99_ms": 20.374223710000003,
-      "mean_ms": 14.008367533333335,
-      "min_ms": 10.625443,
-      "max_ms": 20.954311,
-      "throughput_items_s": 571.087243461007,
-      "rss_start_mb": 655.25390625,
-      "rss_peak_observed_mb": 655.41015625,
-      "rss_observed_delta_mb": 0.15625
+      "p50_ms": 237.9241545,
+      "p95_ms": 252.74314069999997,
+      "p99_ms": 255.08822566999999,
+      "mean_ms": 237.87217853333334,
+      "min_ms": 224.235749,
+      "max_ms": 255.553553,
+      "throughput_items_s": 33.631507683354194,
+      "rss_start_mb": 5296.28515625,
+      "rss_peak_observed_mb": 5296.28515625,
+      "rss_observed_delta_mb": 0.0
     },
-    "parameter_size_mib": 16.732433319091797,
-    "state_sha256": "3f24ce76e750a66daab90a7e152007cd5dad055ff59c6dc0bf462e9168ac5a73",
-    "quality_metric": "prediction_agreement_to_fp32_not_task_quality",
+    "parameter_size_mib": 516.2343902587891,
+    "state_sha256": "ca3b92ae2f08bdf7e24b339a7ca9f10885d0bb5efec05efa493db78a83c6ab74",
+    "quality_metric": "macro_f1_validation_full_workload",
     "quality": 1.0
   },
   "onnx_fp32": {
@@ -82,24 +82,24 @@
       "warmup": 5,
       "repetitions": 30,
       "items_per_call": 8,
-      "p50_ms": 5.697563499999999,
-      "p95_ms": 6.803193350000001,
-      "p99_ms": 6.8409051199999995,
-      "mean_ms": 5.847062566666667,
-      "min_ms": 5.340537,
-      "max_ms": 6.850409,
-      "throughput_items_s": 1368.2083796412487,
-      "rss_start_mb": 742.8125,
-      "rss_peak_observed_mb": 742.8125,
+      "p50_ms": 224.7858725,
+      "p95_ms": 340.68027535,
+      "p99_ms": 347.20517968,
+      "mean_ms": 258.1838951666667,
+      "min_ms": 196.325727,
+      "max_ms": 349.304695,
+      "throughput_items_s": 30.98566622381974,
+      "rss_start_mb": 5505.30078125,
+      "rss_peak_observed_mb": 5505.30078125,
       "rss_observed_delta_mb": 0.0
     },
     "parity": {
-      "max_abs_logits_diff": 2.086162567138672e-07,
-      "mean_abs_logits_diff": 7.446700323043842e-08,
+      "max_abs_logits_diff": 2.86102294921875e-06,
+      "mean_abs_logits_diff": 7.706694304943085e-07,
       "prediction_agreement": 1.0
     },
-    "size_mib": 16.787826538085938,
-    "sha256": "2c9fd6605f57385c50c0957868853a1b1ab7e9ce0a49cb1a907194477a4b3edd",
+    "size_mib": 516.3483638763428,
+    "sha256": "f66c5bca71a61167bc8e7456f1a2ad12a6873d4ff2b8ffba793c1d9ec670e5da",
     "quality": 1.0,
     "quality_tax": 0.0,
     "budget": {
@@ -108,7 +108,7 @@
       "throughput_ok": true,
       "budget_met": true
     },
-    "p95_speedup_vs_pytorch": 2.9184324373200417
+    "p95_speedup_vs_pytorch": 1.1578075280254114
   },
   "onnx_dynamic_int8": {
     "status": {
@@ -120,35 +120,35 @@
       "warmup": 5,
       "repetitions": 30,
       "items_per_call": 8,
-      "p50_ms": 4.5905625,
-      "p95_ms": 6.76621075,
-      "p99_ms": 6.98374213,
-      "mean_ms": 5.077821666666667,
-      "min_ms": 4.376212,
-      "max_ms": 7.063435,
-      "throughput_items_s": 1575.4787239803943,
-      "rss_start_mb": 744.0,
-      "rss_peak_observed_mb": 744.0,
+      "p50_ms": 136.091038,
+      "p95_ms": 208.94314255,
+      "p99_ms": 211.48845205000003,
+      "mean_ms": 159.49771786666668,
+      "min_ms": 123.651839,
+      "max_ms": 212.214367,
+      "throughput_items_s": 50.157457467119755,
+      "rss_start_mb": 5608.2109375,
+      "rss_peak_observed_mb": 5608.2109375,
       "rss_observed_delta_mb": 0.0
     },
     "parity": {
-      "max_abs_logits_diff": 0.028613325208425522,
-      "mean_abs_logits_diff": 0.010538831353187561,
-      "prediction_agreement": 1.0
+      "max_abs_logits_diff": 1.37660551071167,
+      "mean_abs_logits_diff": 0.3309343457221985,
+      "prediction_agreement": 0.5
     },
-    "size_mib": 4.287415504455566,
-    "sha256": "1590b1c845584fc6e5d7c0abd128d752877428a89b20002cf11ba787f56f17e9",
-    "quality": 1.0,
-    "quality_tax": 0.0,
+    "size_mib": 129.4454002380371,
+    "sha256": "be605ccbb99d988e9a1a6a05b33c695d1c301b15cb3616df96efdc406a26a198",
+    "quality": 0.43452380952380953,
+    "quality_tax": 0.5654761904761905,
     "budget": {
       "latency_ok": true,
-      "quality_ok": true,
+      "quality_ok": false,
       "throughput_ok": true,
-      "budget_met": true
+      "budget_met": false
     }
   },
-  "selected_for_service": "onnx-dynamic-int8",
-  "adoption_decision": "ADOPT_INT8",
-  "decision_scope": "SYSTEMS_SMOKE_NOT_A_SHIP_DECISION",
+  "selected_for_service": "onnx-fp32",
+  "adoption_decision": "ADOPT_ONNX_FP32",
+  "decision_scope": "PROJECT_BUDGET_DECISION",
   "fp32_rollback": "Re-export from recorded MODEL_SOURCE; weights stay outside GitHub."
 }
