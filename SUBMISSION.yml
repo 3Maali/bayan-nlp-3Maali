@@ -1,0 +1,13 @@
+course: bayan-applied-nlp
+
+student_github: 3Maali
+
+repository: https://github.com/3Maali/bayan-nlp-3Maali
+
+default_branch: main
+
+final_tag: submission-v1.0
+
+runtime: google-colab
+
+visibility: public
