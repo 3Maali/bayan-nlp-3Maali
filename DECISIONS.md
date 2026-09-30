@@ -254,6 +254,162 @@ Taxonomy:
 
 ---
 
+
+
+
+---
+
+## Decision D-006 — Performance Budget
+
+* **Date:** 2026-09-30
+* **Gate:** D
+* **Status:** accepted
+* **Owner:** Student
+
+### Decision
+
+اعتماد performance budget قبل قياس المشروع:
+
+| Metric          |          Budget |
+| --------------- | --------------: |
+| Max p95 latency |     **1000 ms** |
+| Min throughput  | **0.1 items/s** |
+| Max quality tax |        **0.05** |
+| Target device   |   **Colab CPU** |
+
+### Evidence
+
+تم تطبيق الميزانية على benchmark النهائي في `Final_NLP.ipynb` باستخدام `PROJECT_ARTIFACT`.
+
+Evidence:
+
+* `Final_NLP.ipynb`
+* `BENCHMARKS.md`
+* `reports/benchmark_results.json`
+
+---
+
+## Decision D-007 — ONNX FP32 Serving
+
+* **Date:** 2026-09-30
+* **Gate:** D
+* **Status:** accepted
+* **Owner:** Student
+
+### Decision
+
+اعتماد **ONNX FP32** كـ serving artefact للمشروع.
+
+### Project Benchmark
+
+| Metric                 |  PyTorch FP32 |         ONNX FP32 |
+| ---------------------- | ------------: | ----------------: |
+| Model-only p95 latency |     394.44 ms |     **340.68 ms** |
+| Throughput             | 27.80 items/s | **30.99 items/s** |
+| Prediction agreement   |             — |        **1.0000** |
+| Quality                |        1.0000 |        **1.0000** |
+| Quality tax            |             — |        **0.0000** |
+
+### Budget Result
+
+* Latency: **PASS**
+* Throughput: **PASS**
+* Quality tax: **PASS**
+* Overall budget: **PASS**
+
+### Rationale
+
+ONNX FP32 حقق performance budget المحدد مع الحفاظ على prediction agreement كامل مع PyTorch FP32 على workload المقاس.
+
+### Evidence
+
+* `Final_NLP.ipynb`
+* `BENCHMARKS.md`
+* `reports/benchmark_results.json`
+
+### Rollback
+
+في حال فشل ONNX parity أو ظهرت regression، يتم إعادة تصدير artefact من recorded model source وإعادة تشغيل benchmark واختبارات serving.
+
+---
+
+## Decision D-008 — Dynamic INT8
+
+* **Date:** 2026-09-30
+* **Gate:** D
+* **Status:** rejected
+* **Owner:** Student
+
+### Decision
+
+**عدم اعتماد Dynamic INT8** كـ serving artefact النهائي للمشروع.
+
+### Evidence
+
+| Metric               |  Dynamic INT8 |
+| -------------------- | ------------: |
+| p95 latency          |     208.94 ms |
+| Throughput           | 50.16 items/s |
+| Prediction agreement |        0.5000 |
+| Quality              |        0.4345 |
+| Quality tax          |    **0.5655** |
+
+Budget:
+
+* Latency: **PASS**
+* Throughput: **PASS**
+* Quality tax: **FAIL**
+* Overall budget: **FAIL**
+
+### Rationale
+
+Dynamic INT8 حسّن latency وthroughput، لكنه تجاوز الحد الأقصى المسموح للـquality tax وهو `0.05`.
+
+لذلك تم الاحتفاظ به كـ evaluated alternative، بينما تم اعتماد ONNX FP32 للـserving.
+
+### Evidence
+
+* `Final_NLP.ipynb`
+* `BENCHMARKS.md`
+* `reports/benchmark_results.json`
+
+---
+
+## Decision D-009 — Serving Contract & Artefact
+
+* **Date:** 2026-09-30
+* **Gate:** D
+* **Status:** accepted
+* **Owner:** Student
+
+### Decision
+
+اعتماد serving contract الموثق في المشروع مع ONNX FP32، مع الاحتفاظ باختبارات API وcanaries كجزء من release evidence.
+
+### Evidence
+
+API tests:
+
+* `/health`: **200 PASS**
+* Arabic request: **200 PASS**
+* English request: **200 PASS**
+* Empty input: **422 PASS**
+* Unsupported language: **422 PASS**
+* Arabic canary: **PASS**
+* English canary: **PASS**
+
+### Evidence Files
+
+* `Final_NLP.ipynb`
+* `reports/service_smoke.json`
+* `tests/`
+
+### Rollback
+
+عند فشل health check أو canary أو prediction parity، يتم إيقاف artefact الحالي والعودة إلى PyTorch FP32 المرجعي، ثم إعادة التحقق قبل إعادة النشر.
+
+---
+
 # قرارات إلزامية قبل Gate E
 
 * [x] tokenizer + max length
@@ -261,6 +417,21 @@ Taxonomy:
 * [x] task model/baseline and split
 * [x] semantic encoder/index/k/threshold
 * [x] metric/slices/error priorities
-* [ ] performance budget
-* [ ] ONNX/INT8 adopt or reject
-* [ ] served artefact + preprocessing/label versions
+* [x] performance budget
+* [x] ONNX/INT8 adopt or reject
+* [x] served artefact + preprocessing/label versions
+
+---
+
+# Gate D Evidence
+
+* [x] Final project benchmark — `PROJECT_ARTIFACT`
+* [x] Performance budget
+* [x] ONNX FP32 parity
+* [x] Dynamic INT8 evaluation
+* [x] Serving API tests
+* [x] Arabic/English canaries
+* [x] Benchmark report
+* [x] Service smoke report
+
+**Gate D status:** `PASSED`
