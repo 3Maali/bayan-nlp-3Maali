@@ -61,13 +61,41 @@
 
 ---
 
+# إعادة التشغيل على Google Colab | Reproduce on Google Colab Free
+
+روابط دفاتر المشروع الرسمية:
+
+| #  | Notebook                       | Colab                                                                                                                                       | Purpose     |
+| -- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| 00 | Runtime Doctor                 | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/00_runtime_doctor.ipynb)               | Environment |
+| 01 | Text Processing & Tokenization | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/01_text_processing_tokenization.ipynb) | Gate A      |
+| 02 | Attention & Transformers       | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/02_attention_transformers.ipynb)       | T2          |
+| 03 | Text Classification            | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/03_text_classification.ipynb)          | Gate B      |
+| 04 | NER & QA                       | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/04_ner_and_qa.ipynb)                   | Gate B      |
+| 05 | Arabic NLP                     | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/05_arabic_nlp.ipynb)                   | Gate C      |
+| 06 | Semantic Search                | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/06_semantic_search.ipynb)              | Gate C      |
+| 07 | Evaluation & Error Analysis    | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/07_evaluation_error_analysis.ipynb)    | Gate C      |
+| 08 | Optimization & Serving         | [Open in Colab](https://colab.research.google.com/github/3Maali/bayan-nlp-3Maali/blob/main/notebooks/08_optimization_serving.ipynb)         | Gate D      |
+
+### Final notebook
+
+يوجد أيضًا `Final_NLP.ipynb` في جذر المستودع، وهو الإصدار المدمج الذي يجمع مراحل المشروع النهائية في دفتر واحد.
+
+### Clean-run instructions
+
+1. افتح `00_runtime_doctor.ipynb` أو أحد دفاتر المشروع من GitHub في Google Colab.
+2. اختر **Save a copy in Drive**.
+3. شغّل الدفاتر بالترتيب من Day 1 إلى Day 4.
+4. استخدم **Runtime → Restart session and run all** قبل التسليم النهائي.
+5. لا تضع tokens أو PII أو model weights أو روابط Drive خاصة داخل المستودع.
+
+---
+
 # نتائج اللابات | Lab Results
 
 ## Day 1 — Text Processing & Tokenization
 
 تمت مقارنة **Local WordPiece** مع **mBERT tokenizer** على عينة تعليمية صغيرة.
-
-النتائج:
 
 | Tokenizer       | Arabic Fertility | English Fertility | Truncation |
 | --------------- | ---------------: | ----------------: | ---------: |
@@ -101,4 +129,404 @@
 
 تم استخدام split منفصل للتدريب والتحقق والاختبار مع عدم وجود group overlap.
 
-### Sentiment Class
+### Sentiment Classification
+
+تم تنفيذ sentiment كـ classification head مستقل عن topic classification.
+
+### NER
+
+* Entity F1: **0.5714 — MEASURED_SMOKE**
+* تم استخدام subword alignment.
+* continuation/special tokens تستخدم `-100`.
+
+### Extractive QA
+
+تم تطبيق سياسة واضحة للحالات التي لا تحتوي على إجابة داخل السياق:
+
+`no_answer_in_context`
+
+وتم اختبار valid spans وno-answer cases.
+
+**Gate B:** `PASS`
+
+---
+
+# Day 3 — Arabic NLP
+
+تم إنشاء preprocessing profile يفصل بين النص الأصلي والنص المستخدم للنموذج:
+
+* `display_text`
+* `model_text`
+* Search profile: `search/1.0.0`
+
+وتشمل المعالجة:
+
+* إزالة التشكيل.
+* إزالة التطويل.
+* تطبيع بعض أشكال الألف.
+* الحفاظ على التاء المربوطة.
+* دعم Arabizi كـ passthrough heuristic وليس classifier.
+
+تم استخدام `camel-tools==1.6.0`.
+
+تم توثيق القرارات في:
+
+* `notebooks/05_arabic_nlp.ipynb`
+* `DECISIONS.md` — القرار `D-003`
+* `reports/bayan_arabic_profile.json`
+
+---
+
+# Semantic Search
+
+تم بناء بحث دلالي ثنائي اللغة باستخدام:
+
+* Encoder: `paraphrase-multilingual-MiniLM-L12-v2`
+* Embedding dimensions: `384`
+* L2 normalization
+* FAISS: `IndexFlatIP`
+
+النتائج:
+
+* Recall@3: **1.0000 — MEASURED_SMOKE**
+* MRR@3: **0.6667 — MEASURED_SMOKE**
+* No-answer accuracy: **1.0000**
+
+تمت تجربة reranker:
+
+* MRR قبل reranking: `0.6667`
+* MRR بعد reranking: `0.7222`
+* Delta: `+0.0556`
+
+تم توثيق التنفيذ والقياسات في:
+
+* `notebooks/06_semantic_search.ipynb`
+* `reports/search_manifest.json`
+* `reports/retrieval_metrics.json`
+* `DECISIONS.md` — القرار `D-004`
+
+---
+
+# Evaluation & Error Analysis
+
+تم تحليل الأخطاء على validation fixture.
+
+أنواع الأخطاء:
+
+* `dialect_gap`: 3
+* `hard_or_ambiguous`: 3
+* `class_confusion`: 2
+
+الإجراءات المقترحة:
+
+1. زيادة وتحسين أمثلة اللهجة الخليجية.
+2. إضافة أمثلة contrastive للفئات المتشابهة.
+3. تحسين التعامل مع الطلبات القصيرة والغامضة.
+
+تم توثيق التحليل في:
+
+* `notebooks/07_evaluation_error_analysis.ipynb`
+* `EVALUATION_REPORT.md`
+* `reports/day3_slice_report.csv`
+* `reports/day3_error_taxonomy.csv`
+
+**Gate C:** `PASS`
+
+---
+
+# Day 4 — Optimization & Serving
+
+تم قياس نموذج المشروع الفعلي باعتباره:
+
+`PROJECT_ARTIFACT`
+
+على Colab CPU باستخدام workload ثنائي اللغة من 8 أمثلة.
+
+## Performance Budget
+
+| المعيار             |        الحد |
+| ------------------- | ----------: |
+| Maximum p95 latency |     1000 ms |
+| Minimum throughput  | 0.1 items/s |
+| Maximum quality tax |        0.05 |
+| Target device       |   Colab CPU |
+
+## النتائج
+
+| Candidate         |           p95 |        Throughput |    Quality | Quality Tax | القرار   |
+| ----------------- | ------------: | ----------------: | ---------: | ----------: | -------- |
+| PyTorch FP32      |     394.44 ms |     27.80 items/s |     1.0000 |      0.0000 | Baseline |
+| ONNX FP32         | **340.68 ms** | **30.99 items/s** | **1.0000** |  **0.0000** | Adopt    |
+| ONNX Dynamic INT8 |     208.94 ms |     50.16 items/s |     0.4345 |      0.5655 | Reject   |
+
+**القرار:** `ADOPT_ONNX_FP32`
+
+حقق ONNX FP32 متطلبات الميزانية مع:
+
+* Prediction agreement = `1.0`
+* Quality tax = `0.0`
+
+تمت تجربة Dynamic INT8، لكنه لم يحقق شرط الجودة بسبب `quality tax = 0.5655`، لذلك لم يتم اعتماده.
+
+تم توثيق القياسات في:
+
+* `notebooks/08_optimization_serving.ipynb`
+* `BENCHMARKS.md`
+
+**Gate D:** `PASS`
+
+---
+
+# Serving
+
+تم اختبار FastAPI على نموذج المشروع الفعلي.
+
+الاختبارات شملت:
+
+* `/health`
+* Arabic request
+* English request
+* Empty input rejection
+* Unsupported language rejection
+* Arabic canary
+* English canary
+
+جميع اختبارات API الأساسية نجحت.
+
+---
+
+# Architecture
+
+```text
+                    Arabic / English Text
+                            │
+                            ▼
+                  Privacy + Preprocessing
+                    │              │
+                    ▼              ▼
+              display_text     model_text
+                                   │
+             ┌─────────────────────┼─────────────────────┐
+             ▼                     ▼                     ▼
+       Classification             NER              Semantic Search
+       ├─ Topic                   │                 ├─ Embeddings
+       └─ Sentiment               │                 ├─ FAISS
+                                  │                 └─ Reranking
+             │                    │
+             └─────────────┬──────┘
+                           ▼
+                  Extractive QA
+                   + no-answer
+                           │
+                           ▼
+                 Evaluation & Errors
+                           │
+                           ▼
+                 ONNX / FastAPI Serving
+```
+
+---
+
+# النتائج الرئيسية | Results
+
+| Component            | Metric               | Result                       | Evidence             |
+| -------------------- | -------------------- | ---------------------------- | -------------------- |
+| Topic classification | Test Macro-F1        | **0.8667 — MEASURED_SMOKE**  | `DECISIONS.md` D-002 |
+| Topic classification | Test Accuracy        | **0.8750 — MEASURED_SMOKE**  | `DECISIONS.md` D-002 |
+| NER                  | Entity F1            | **0.5714 — MEASURED_SMOKE**  | `DECISIONS.md` D-002 |
+| Semantic Search      | Recall@3             | **1.0000 — MEASURED_SMOKE**  | `DECISIONS.md` D-004 |
+| Semantic Search      | MRR@3                | **0.6667 — MEASURED_SMOKE**  | `DECISIONS.md` D-004 |
+| Serving              | ONNX FP32 p95        | **340.68 ms — MEASURED**     | `BENCHMARKS.md`      |
+| Serving              | ONNX FP32 throughput | **30.99 items/s — MEASURED** | `BENCHMARKS.md`      |
+| Serving              | Quality tax          | **0.0000 — MEASURED**        | `BENCHMARKS.md`      |
+
+---
+
+# Measured Extension | الامتداد المقاس
+
+* **Extension:** ONNX FP32 optimized serving with dynamic INT8 evaluation.
+* **Baseline:** PyTorch FP32.
+* **ONNX FP32:** p95 = `340.68 ms`, throughput = `30.99 items/s`.
+* **Dynamic INT8:** p95 = `208.94 ms`, throughput = `50.16 items/s`.
+* **INT8 quality tax:** `0.5655`.
+* **Decision:** `ADOPT_ONNX_FP32`.
+* **Evidence:** `BENCHMARKS.md` و`notebooks/08_optimization_serving.ipynb`.
+
+---
+
+# الخصوصية والاستخدام المسؤول | Privacy & Responsible Use
+
+* لا يحتوي المستودع على بيانات مستفيدين حقيقية.
+* لا يتم رفع tokens أو secrets.
+* لا يتم رفع model weights الكبيرة إلى GitHub.
+* النتائج الحالية مبنية على بيانات تعليمية صغيرة.
+* اختلاف اللهجات العربية، خصوصًا اللهجة الخليجية، يمثل أحد القيود.
+* لا ينبغي استخدام النظام لاتخاذ قرارات حكومية أو إنتاجية دون validation إضافي وبيانات ممثلة ومراجعة بشرية.
+
+---
+
+# المساهمة | Contribution
+
+المشروع فردي، وشملت مساهمتي تنفيذ وتطوير مراحل المشروع وتوثيق القرارات والنتائج والاختبارات.
+
+### تغييرات محددة
+
+**1. قرار mBERT Tokenizer**
+
+في:
+
+`notebooks/01_text_processing_tokenization.ipynb`
+
+قارنت بين Local WordPiece وmBERT tokenizer باستخدام قياسات fertility وtruncation.
+
+بناءً على المقارنة تم اعتماد **mBERT tokenizer كـ baseline** مع `max_length=12`.
+
+الدليل:
+
+* `DECISIONS.md` → `D-001`
+* `tests/` → tokenization tests
+
+**2. Arabic Preprocessing**
+
+في:
+
+`notebooks/05_arabic_nlp.ipynb`
+
+نفذت فصل `display_text` عن `model_text` وطبقت search profile `search/1.0.0`.
+
+الدليل:
+
+* `DECISIONS.md` → `D-003`
+* `reports/bayan_arabic_profile.json`
+
+**3. Semantic Search**
+
+في:
+
+`notebooks/06_semantic_search.ipynb`
+
+نفذت multilingual embeddings وFAISS وreranking، وقست Recall@3 وMRR@3.
+
+الدليل:
+
+* `reports/retrieval_metrics.json`
+* `DECISIONS.md` → `D-004`
+
+**4. Evaluation & Error Analysis**
+
+في:
+
+`notebooks/07_evaluation_error_analysis.ipynb`
+
+نفذت slice evaluation وerror taxonomy.
+
+الدليل:
+
+* `EVALUATION_REPORT.md`
+* `reports/day3_error_taxonomy.csv`
+
+**5. Optimization & Serving**
+
+في:
+
+`notebooks/08_optimization_serving.ipynb`
+
+نفذت benchmark لنموذج المشروع الفعلي، وقارنت PyTorch FP32 وONNX FP32 وDynamic INT8.
+
+الدليل:
+
+`BENCHMARKS.md`
+
+---
+
+# AI Assistance
+
+استخدمت **ChatGPT من OpenAI** أثناء تنفيذ المشروع كمساعد في:
+
+* شرح مفاهيم NLP وTransformers وtokenization.
+* مراجعة بعض أجزاء الكود.
+* troubleshooting لبعض المشكلات البرمجية.
+* تنظيم وتنسيق التوثيق وREADME.
+* مراجعة صياغة بعض ملفات التسليم.
+
+### طريقة التحقق
+
+لم أستخدم ChatGPT كمصدر للنتائج التجريبية. تم تنفيذ الكود والقياسات والاختبارات في بيئة المشروع، وتمت مراجعة النتائج والمخرجات قبل توثيقها.
+
+أدلة التحقق تشمل:
+
+* `notebooks/`
+* `DECISIONS.md`
+* `BENCHMARKS.md`
+* `EVALUATION_REPORT.md`
+* `tests/`
+* `reports/`
+
+---
+
+# Training Context | السياق التدريبي
+
+This educational project was developed during:
+
+**Applied Natural Language Processing with Transformers (SDA-AIE-211)**
+
+في سياق **SDAIA Academy**.
+
+**Academy | الأكاديمية:**
+https://github.com/SDAIAAcademy
+
+**Trainer | المدربة:** Meaad Al-Marri — ميعاد المري
+
+**Course source:**
+https://github.com/almiyead-rgb/bayan-applied-nlp-course
+
+**#SDAIAAcademy**
+
+هذا النسب لا يعني اعتماد المشروع أو ملكية الأكاديمية للكود أو النماذج أو المكتبات أو البيانات التابعة لأطراف أخرى.
+
+---
+
+# الأدلة والتوثيق | Evidence
+
+* `STUDENT_PROFILE.md`
+* `PROGRESS.md`
+* `DECISIONS.md`
+* `EVALUATION_REPORT.md`
+* `BENCHMARKS.md`
+* `MODEL_CARD.md`
+* `DATA_CARD.md`
+* `PROJECT_SUMMARY.json`
+* `SUBMISSION.yml`
+* `reports/`
+* `tests/`
+
+---
+
+# Final Validation
+
+```bash
+PYTHONPATH=src python scripts/validate_submission.py . --require-tag
+PYTHONPATH=src python scripts/preflight_submission.py . --require-tag
+```
+
+الإصدار النهائي:
+
+```text
+submission-v1.0
+```
+
+---
+
+# Final Hand-in | التسليم النهائي
+
+أقر بأنني راجعت متطلبات المشروع وملفات الأدلة ونتائج الاختبارات ومتطلبات الخصوصية قبل التسليم النهائي.
+
+**Final tag:** `submission-v1.0`
+
+---
+
+# License & Acknowledgements
+
+هذا المشروع تعليمي. تخضع المكتبات والنماذج والبيانات والمصادر الخارجية المستخدمة في المشروع لتراخيصها وشروط استخدامها الخاصة.
+
+لا يدعي المشروع ملكية النماذج أو المكتبات أو البيانات أو العلامات المؤسسية التابعة لأطراف أخرى.
